@@ -68,6 +68,29 @@ String getIdentifier() {
   return ID_PREFIX + chipId;
 }
 
+/**
+   return a JSON string representation of the current state
+*/
+String getStateJson(bool save = false) {
+  // code partially generated using https://arduinojson.org/v5/assistant/
+  const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(5);
+  DynamicJsonBuffer jsonBuffer(bufferSize);
+  JsonObject& root = jsonBuffer.createObject();
+  if (!save) {
+    root["id"] = getIdentifier();
+  }
+  root["brightness"] = value;
+  root["state"] = state ? on_state : off_state;
+  root["effect"] = effect;
+  JsonObject& color = root.createNestedObject("color");
+  color["h"] = hue;
+  color["s"] = saturation;
+
+  String jsonString;
+  root.printTo(jsonString);
+  return jsonString;
+}
+
 void setup() {
   Serial.begin(115200);
   Serial.println();
@@ -217,27 +240,6 @@ boolean connectPubSub() {
 */
 bool isValidAndDifferentEffect(const char *ef) {
   return ef && (strcmp(ef, "none") == 0 || strcmp(ef, "colorloop") == 0 || strcmp(ef, "trail") == 0 || strcmp(ef, "rainbow") == 0 || strcmp(ef, "fire") == 0) && strcmp(ef, effect) != 0;
-}
-
-/**
-   return a JSON string representation of the current state
-*/
-String getStateJson() {
-  // code partially generated using https://arduinojson.org/v5/assistant/
-  const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(5);
-  DynamicJsonBuffer jsonBuffer(bufferSize);
-  JsonObject& root = jsonBuffer.createObject();
-  root["id"] = getIdentifier(); // not really part of the state, but doesn't hurt to include it
-  root["brightness"] = value;
-  root["state"] = state ? on_state : off_state;
-  root["effect"] = effect;
-  JsonObject& color = root.createNestedObject("color");
-  color["h"] = hue;
-  color["s"] = saturation;
-
-  String jsonString;
-  root.printTo(jsonString);
-  return jsonString;
 }
 
 /**
@@ -611,7 +613,7 @@ void saveState() {
     return;
   }
 
-  String stateJson = getStateJson();
+  String stateJson = getStateJson(true);
   Serial.print("saving state ");
   Serial.println(stateJson);
   stateFile.print(stateJson);
