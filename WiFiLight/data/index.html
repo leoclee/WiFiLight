@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lange="en">
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<style>
+input[type="range"] {
+	-webkit-appearance: none;
+	border-radius: .25rem;
+	padding: 0.375rem 0;
+}
+input[type=range]::-moz-range-track {
+	background: transparent;
+}
+</style>
+</head>
+<body>
+<!-- header -->
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+	<span class="navbar-brand"></span>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarCollapse">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="wificonfig" id="wificonfig"><i class="fas fa-wifi" title="change WiFi"></i></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#" data-toggle="modal" data-target="#infoModal"><i class="fas fa-info-circle" title="info"></i></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#" data-toggle="modal" data-target="#aboutModal"><i class="fas fa-question-circle" title="about"></i></a>
+			</li>
+		</ul>
+	</div>
+  </nav>
+</header>
+
+<!-- content -->
+<div role="main" class="container mt-3">
+	<form>
+		<div class="form-group form-inline">
+			<label class="col-sm-1 col-form-label"><i class="fas fa-power-off" aria-hidden title="Power"></i><span class="sr-only">Power:</span></label>
+			<div class="col-sm-11">
+				<div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+					<label class="btn btn-primary w-100">
+						<input type="radio" name="state" autocomplete="off" value="ON">ON
+					</label>
+					<label class="btn btn-primary w-100">
+						<input type="radio" name="state" autocomplete="off" value="OFF">OFF
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-inline">
+			<label for="valrange" class="col-sm-1 col-form-label"><i class="fas fa-sun" aria-hidden title="Brightness"></i><span class="sr-only">Brightness:</span></label>
+			<div class="col-sm-11">
+				<input type="range" min="0" max="100" value="50" class="form-control-range" id="valrange" title="brightness">
+			</div>
+		</div>
+		<div class="form-group form-inline">
+			<label for="huerange" class="col-sm-1 col-form-label"><i class="fas fa-palette" aria-hidden title="Color"></i><span class="sr-only">Color:</span></label>
+			<div class="col-sm-11">
+				<input type="range" min="0" max="359" value="180" class="form-control-range" id="huerange" title="hue">
+				<input type="range" min="0" max="100" value="100" class="form-control-range mt-2" id="satrange" title="saturation">
+			</div>
+		</div>
+		<div class="form-group form-inline">
+			<label class="col-sm-1 col-form-label"><i class="fas fa-magic" aria-hidden title="Effect"></i><span class="sr-only">Effect:</span></label>
+			<div class="col-sm-11">
+				<div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+					<label class="btn btn-primary w-100">
+						<input type="radio" name="effect" autocomplete="off" value="none">none
+					</label>
+					<label class="btn btn-primary w-100">
+						<input type="radio" name="effect" autocomplete="off" value="colorloop">colorloop
+					</label>
+					<label class="btn btn-primary w-100">
+						<input type="radio" name="effect" autocomplete="off" value="trail">trail
+					</label>
+					<label class="btn btn-primary w-100">
+						<input type="radio" name="effect" autocomplete="off" value="rainbow">rainbow
+					</label>
+					<label class="btn btn-primary w-100">
+						<input type="radio" name="effect" autocomplete="off" value="fire">fire
+					</label>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!-- info modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-info-circle" title="info"></i> Info</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<dl class="row">
+					<dt class="col-sm-4">Hostname</dt>
+					<dd class="col-sm-8" id="hostname"></dd>
+					<dt class="col-sm-4">SSID</dt>
+					<dd class="col-sm-8" id="ssid"></dd>
+					<dt class="col-sm-4">IP Address</dt>
+					<dd class="col-sm-8" id="ip"></dd>
+					<dt class="col-sm-4">MAC Address</dt>
+					<dd class="col-sm-8" id="mac"></dd>
+					<dt class="col-sm-4">Signal Strength</dt>
+					<dd class="col-sm-8" id="rssi"></dd>
+					<dt class="col-sm-4">Sketch Size</dt>
+					<dd class="col-sm-8" id="sketch"></dd>
+					<dt class="col-sm-4">Free Heap</dt>
+					<dd class="col-sm-8" id="heap"></dd>
+					<dt class="col-sm-4">CPU Frequency</dt>
+					<dd class="col-sm-8" id="cpu"></dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- about modal -->
+<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-question-circle" title="about"></i> About</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<dl class="row">
+					<dt class="col-sm-3">About</dt>
+					<dd class="col-sm-9" id="about">
+						WiFiLight (<a href="https://github.com/leoclee/WiFiLight">https://github.com/leoclee/WiFiLight</a>)<br>
+						Copyright &copy; 2018<script>var year = new Date().getFullYear();year > 2018 && document.write("-" + year);</script> <a href="https://github.com/leoclee">Leonard Lee</a><br>
+						<a href="https://raw.githubusercontent.com/leoclee/WiFiLight/master/LICENSE">License</a>
+					</dd>
+				</dl>
+				<hr>
+				<dl class="row">
+					<dt class="col-sm-3">Credits & Attributions</dt>
+					<dd class="col-sm-9" id="credits">
+						<ul>
+							<li><a href="https://github.com/esp8266/Arduino">ESP8266 core for Arduino</a> by ESP8266 Community</li>
+							<li><a href="https://github.com/tzapu/WiFiManager">WiFiManager</a> by <a href="https://tzapu.com/">tzapu</a></li>
+							<li><a href="http://fastled.io/">FastLED</a> by <a href="https://github.com/focalintent">Daniel Garcia</a> and <a href="https://github.com/kriegsman">Mark Kriegsman</a></li>
+							<li><a href="https://pubsubclient.knolleary.net">PubSubClient</a> by <a href="https://twitter.com/knolleary">Nick O'Leary</a></li>
+							<li><a href="https://arduinojson.org">ArduinoJson</a> by <a href="https://www.linkedin.com/in/benoit-blanchon">Benoît Blanchon</a></li>
+							<li><a href="https://github.com/Links2004/arduinoWebSockets">WebSockets</a> by <a href="https://github.com/Links2004">Markus Sattler</a></li>
+							<li><a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a> and <a href="https://twitter.com/fat">@fat</a></li>
+							<li><a href="https://fontawesome.com">FontAwesome</a> by Fonticons, Inc.</li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- js -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>
+// https://codeburst.io/throttling-and-debouncing-in-javascript-b01cad5c8edf
+const throttle = (func, limit) => {
+  let lastFunc
+  let lastRan
+  return function() {
+    const context = this
+    const args = arguments
+    if (!lastRan) {
+      func.apply(context, args)
+      lastRan = Date.now()
+    } else {
+      clearTimeout(lastFunc)
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(context, args)
+          lastRan = Date.now()
+        }
+      }, limit - (Date.now() - lastRan))
+    }
+  }
+}
+
+$('#wificonfig').on('click',function(e){
+	if (!confirm('Change WiFi network (will clear saved connection settings)?')) {
+		e.preventDefault();
+	}
+});
+
+$('#infoModal').on('show.bs.modal', function () {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function()
+	{
+		if(xmlHttp.readyState === XMLHttpRequest.DONE && xmlHttp.status === 200) {
+			var info = xmlHttp.response;
+			console.log(info);
+			$('#hostname').text(info.hostname);
+			$('#ssid').text(info.ssid);
+			$('#ip').text(info.ipAddress);
+			$('#mac').text(info.macAddress);
+			$('#rssi').text(info.rssi + " dBm");
+			var sketchSize = info.sketchSize;
+			var totalSketchSpace = sketchSize + info.freeSketchSpace;
+			$('#sketch').text(sketchSize + " bytes (" + Number((sketchSize/totalSketchSpace*100).toFixed(1)) + "%) of " + totalSketchSpace + " bytes");
+			$('#heap').text(info.freeHeap + " bytes");
+			$('#cpu').text(info.cpuFreqMHz + " MHz");
+		}
+	}
+	xmlHttp.open("GET", "info");
+	xmlHttp.responseType = "json";
+	xmlHttp.send();
+});
+
+var huerange = document.getElementById("huerange");
+var satrange = document.getElementById("satrange");
+var valrange = document.getElementById("valrange");
+
+function updateBackground() {
+	var hue = huerange.value;
+	satrange.style.background = "linear-gradient(to right,#FFF,hsl(" + hue + ",100%,50%))";
+	var sat = satrange.value;
+	valrange.style.background = "linear-gradient(to right,#000,hsl(" + hue + ",100%," + (100 - sat/2) + "%))";
+}
+
+function changeColor() {
+	sendState({
+		"brightness" : valrange.value,
+		"color" : {
+			"h": huerange.value,
+			"s" : satrange.value
+		}
+	});
+}
+
+huerange.addEventListener("input", updateBackground);
+satrange.addEventListener("input", updateBackground);
+var throttledChangeColor = throttle(changeColor, 500);
+huerange.addEventListener("input", throttledChangeColor);
+satrange.addEventListener("input", throttledChangeColor);
+valrange.addEventListener("input", throttledChangeColor);
+
+var huerangeBackground = "linear-gradient(to right";
+for (var i =0; i <= 359; i++) {
+	huerangeBackground += ",hsl(" + i + ",100%,50%)";
+}
+huerangeBackground += ")";
+huerange.style.background = huerangeBackground;
+
+updateBackground();
+
+$('input[type=radio][name=state]').change(function() {
+	sendState({"state":this.value});
+});
+
+$('input[type=radio][name=effect]').change(function() {
+	sendState({"effect":this.value});
+});
+
+function updateRadio(name, value) {
+	var inputs = document.getElementsByName(name);
+	for (let input of inputs) {
+		if (input.value === value) {
+			input.checked = true;
+			input.parentElement.classList.add("active");
+		} else {
+			input.parentElement.classList.remove("active");
+		}
+	}
+}
+
+function handleStateObject(stateObj) {
+	console.log(stateObj);
+	$('.navbar-brand').text(stateObj.id);
+	$('title').text(stateObj.id);
+	updateRadio("state", stateObj.state);
+	updateRadio("effect", stateObj.effect);
+	var color = stateObj.color;
+	huerange.value = color.h;
+	satrange.value = color.s;
+	valrange.value = stateObj.brightness;
+	updateBackground();
+}
+
+function sendState(stateObj) {
+	console.log("sending state ", stateObj);
+	var json = JSON.stringify(stateObj);
+
+	/*
+	// HTTP
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("PUT", "light");
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(json);
+	*/
+
+	// WebSocket
+	ws.send(json);
+}
+
+/*
+// HTTP
+(function loadConfig() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if(xmlHttp.readyState === XMLHttpRequest.DONE && xmlHttp.status === 200) {
+			handleStateObject(xmlHttp.response);
+		}
+	}
+	xmlHttp.open("GET", "light");
+	xmlHttp.responseType = "json";
+	xmlHttp.send();
+})();
+*/
+
+// WebSocket
+// reconnection logic inspired by https://stackoverflow.com/a/31985557
+// originally using https://github.com/joewalnes/reconnecting-websocket, but it didn't work with mDNS (.local) hostnames for some reason...
+var ws = null;
+function checkWebSocket() {
+	if (!ws || ws.readyState === WebSocket.CLOSED) {
+		console.log("attempting to reconnect WebSocket...");
+		connectWebSocket();
+	}
+}
+function connectWebSocket() {
+	ws = new WebSocket('ws://' + window.location.host + ':81/');
+	ws.onerror = function (error) {
+		console.log('WebSocket Error ', error);
+	};
+	ws.onmessage = function (e) {
+		console.log('incoming websocket message: ', e.data);
+		handleStateObject(JSON.parse(e.data));
+	};
+	ws.onclose = function(e) {
+		console.log('Socket is closed: ', e.reason, ' (', e.code, ')');
+		checkWebSocket(); // try to reconnect immediately
+	};
+}
+connectWebSocket();
+setInterval(checkWebSocket, 3000);
+</script>
+</body>
+</html>
