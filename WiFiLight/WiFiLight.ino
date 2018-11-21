@@ -367,9 +367,10 @@ void trail() {
 */
 void rainbow() {
   static uint8_t rainbowHueOffset = 0;
-  EVERY_N_MILLISECONDS(100) { // TODO configurable rainbow speed?
+  EVERY_N_MILLISECONDS(10) { // TODO configurable rainbow speed?
+    rainbowHueOffset++;
     for (int i = 0; i < NUM_LEDS; i++) {
-      leds[i] = CHSV(++rainbowHueOffset + (255 / NUM_LEDS * i), currentColor.s, currentColor.v);
+      leds[i] = CHSV(rainbowHueOffset + (255 / NUM_LEDS * i), currentColor.s, currentColor.v);
     }
     FastLED.show();
   }
