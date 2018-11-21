@@ -350,7 +350,7 @@ void trail() {
     FastLED.clear(true);
   }
   EVERY_N_MILLISECONDS(10) {
-    fadeToBlackBy( leds, NUM_LEDS, 16); // TODO configurable trail fade speed?
+    fadeToBlackBy( leds, NUM_LEDS, 8); // TODO configurable trail fade speed?
     FastLED.show();
   }
   EVERY_N_MILLISECONDS(100) { // TODO configurable trail speed?
@@ -368,11 +368,11 @@ void trail() {
 void rainbow() {
   static uint8_t rainbowHueOffset = 0;
   EVERY_N_MILLISECONDS(10) { // TODO configurable rainbow speed?
-    rainbowHueOffset++;
     for (int i = 0; i < NUM_LEDS; i++) {
       leds[i] = CHSV(rainbowHueOffset + (255 / NUM_LEDS * i), currentColor.s, currentColor.v);
     }
     FastLED.show();
+    rainbowHueOffset++;
   }
 }
 
