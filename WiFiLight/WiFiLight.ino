@@ -51,6 +51,7 @@ ESP8266WebServer server(HTTP_SERVER_PORT);
 // Websockets
 WebSocketsServer webSocket(WEBSOCKET_PORT);
 
+#if MQTT_ENABLED
 // MQTT
 #if MQTT_PORT == 8883
 WiFiClientSecure wiFiClient;
@@ -59,6 +60,7 @@ WiFiClient wiFiClient;
 #endif
 unsigned long lastConnectAttempt = 0;
 PubSubClient pubSubClient(wiFiClient);
+#endif
 
 /**
   Unique identifer used for wifi hostname, AP SSID, MQTT ClientId, etc.
@@ -146,9 +148,11 @@ void setup() {
   webSocket.onEvent(webSocketCallback);       // if there's an incoming websocket message, go to function 'webSocketCallback'
   Serial.printf("WebSocket server started on port %d\n", WEBSOCKET_PORT);
 
+#if MQTT_ENABLED
   // MQTT
   pubSubClient.setServer(MQTT_SERVER, MQTT_PORT);
   pubSubClient.setCallback(mqttCallback);
+#endif
 
   // OTA
   ArduinoOTA.setHostname(getIdentifier().c_str()); // sets an mDNS hostname (defaults to esp8266-[ChipID] if not set)
@@ -178,8 +182,10 @@ void setup() {
 }
 
 void loop() {
+#if MQTT_ENABLED
   // MQTT
   loop_mqtt();
+#endif
 
   // HTTP
   server.handleClient();
@@ -210,6 +216,7 @@ void loop_resetWiFi() {
   }
 }
 
+#if MQTT_ENABLED
 void loop_mqtt() {
   if (!pubSubClient.connected()) {
     unsigned long now = millis();
@@ -238,6 +245,29 @@ boolean connectPubSub() {
   }
   return pubSubClient.connected();
 }
+
+/**
+   publishes the current state to the MQTT state topic
+*/
+void publishState() {
+  String stateJson = getStateJson();
+  Serial.printf("MQTT publish message [%s]: %s\n", MQTT_STATE_TOPIC, stateJson.c_str());
+  pubSubClient.publish(MQTT_STATE_TOPIC, stateJson.c_str());
+}
+
+/**
+  handle incoming MQTT message
+*/
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
+  Serial.printf("MQTT message arrived [%s]: ", topic);
+  Serial.write(payload, length);
+  Serial.println();
+
+  if (strcmp(topic, MQTT_COMMAND_TOPIC) == 0) { // we only care about messages from the command topic
+    handleJsonPayload((const char*) payload);
+  }
+}
+#endif
 
 /**
   returns true if the given effect string is non-empty, one of the valid effect values, and different from the current state's effect; false otherwise
@@ -270,15 +300,6 @@ String getInfoJson() {
 }
 
 /**
-   publishes the current state to the MQTT state topic
-*/
-void publishState() {
-  String stateJson = getStateJson();
-  Serial.printf("MQTT publish message [%s]: %s\n", MQTT_STATE_TOPIC, stateJson.c_str());
-  pubSubClient.publish(MQTT_STATE_TOPIC, stateJson.c_str());
-}
-
-/**
   sends the current state to all currently connected websocket clients
 */
 void broadcastState() {
@@ -291,21 +312,10 @@ void broadcastState() {
   notifies others of the current state, presumably because a change occurred
 */
 void notify() {
+#if MQTT_ENABLED
   publishState();
+#endif
   broadcastState();
-}
-
-/**
-  handle incoming MQTT message
-*/
-void mqttCallback(char* topic, byte* payload, unsigned int length) {
-  Serial.printf("MQTT message arrived [%s]: ", topic);
-  Serial.write(payload, length);
-  Serial.println();
-
-  if (strcmp(topic, MQTT_COMMAND_TOPIC) == 0) { // we only care about messages from the command topic
-    handleJsonPayload((const char*) payload);
-  }
 }
 
 void loop_led() {
