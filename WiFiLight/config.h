@@ -6,12 +6,15 @@
 #define DATA_PIN D2   // the GPIO pin for the LEDs' data
 
 // MQTT
-#define MQTT_PORT 1883                                 // usually 1883 or 8883 (MQTT over TLS/SSL)
-#define MQTT_SERVER "mymqttserver.com"
-#define MQTT_USER "user"
-#define MQTT_PASSWORD "password"
-#define MQTT_STATE_TOPIC "light"       // topic for reporting changes to the current state
-#define MQTT_COMMAND_TOPIC "light-set" // topic for making changes to the current state
+#define MQTT_ENABLED false
+#if MQTT_ENABLED
+  #define MQTT_PORT 1883                                 // usually 1883 or 8883 (MQTT over TLS/SSL)
+  #define MQTT_SERVER "mymqttserver.com"
+  #define MQTT_USER "user"
+  #define MQTT_PASSWORD "password"
+  #define MQTT_STATE_TOPIC "light"       // topic for reporting changes to the current state
+  #define MQTT_COMMAND_TOPIC "light-set" // topic for making changes to the current state
+#endif
 
 // HTTP
 #define HTTP_SERVER_PORT 80 // default HTTP port is 80
