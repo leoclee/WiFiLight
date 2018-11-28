@@ -6,7 +6,7 @@
 #define DATA_PIN D2   // the GPIO pin for the LEDs' data
 
 // MQTT
-#define MQTT_PORT 1883                                 // usually 1883
+#define MQTT_PORT 1883                                 // usually 1883 or 8883 (MQTT over TLS/SSL)
 #define MQTT_SERVER "mymqttserver.com"
 #define MQTT_USER "user"
 #define MQTT_PASSWORD "password"
