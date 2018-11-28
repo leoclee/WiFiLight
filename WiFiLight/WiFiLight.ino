@@ -52,7 +52,11 @@ ESP8266WebServer server(HTTP_SERVER_PORT);
 WebSocketsServer webSocket(WEBSOCKET_PORT);
 
 // MQTT
+#if MQTT_PORT == 8883
+WiFiClientSecure wiFiClient;
+#else
 WiFiClient wiFiClient;
+#endif
 unsigned long lastConnectAttempt = 0;
 PubSubClient pubSubClient(wiFiClient);
 
